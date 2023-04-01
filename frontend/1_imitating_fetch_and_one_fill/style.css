@@ -1,0 +1,50 @@
+.author-card {
+    background-color: coral;
+
+    border: 2px solid blue;
+    border-radius: 0.5rem;
+
+    width: 20%;
+    padding: 2rem;
+
+    color: whitesmoke;
+    
+}
+
+
+
+.author-name-cls {
+    font-size: 24pt;
+    font-weight: bolder;
+    color: blue;
+}
+
+/* Уникальный стиль имени для карточки с идентификаторами */
+#author-name {
+    color:darkblue;
+}
+
+
+
+.author-email-cls {
+    font-size: 14pt;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+/* Уникальный стиль ссылки по id карточки (родителя) */
+#author-card-to-fill .author-email-cls{
+    font-family: monospace;
+}
+
+
+
+.author-bio-cls {
+    padding: 1rem 0;
+    font-size: 12pt;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.author-bio-name-cls {
+    font-style: italic;
+    font-family: 'Courier New', Courier, monospace;
+}

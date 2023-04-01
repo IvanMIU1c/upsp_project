@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>HTML5</title>
+    <!--[if IE]>
+   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+    <style>
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        section {
+            display: block;
+        }
+
+        .request-block {
+            border: 1px solid black;
+            margin: 1rem 0;
+        }
+
+        .request-title {
+            color: darkred;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="actionBtn">Вывести заявки</button>
+
+    <h1>Список заявок</h1>
+
+    <div id="reqsBlock">
+
+        <!-- Показываю свой шаблон -->
+        <div class="request-block">
+            <h3 class="request-title">№{МестоДляНомера} - {МестоДляЗаголовка}</h3>
+            <h4 class="request-name">Заявитель: {МестоДляИмени}</h4>
+            <div class="request-info">{МестоДляИнформации}</div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const example_data = [
+        {title: "Заявка 1", name: "Игорь", info: "В УЛК"}, // [0]
+        {title: "Заявка 2", name: "Иван", info: "В ГЗ"}, // [1]
+        {title: "Заявка 3", name: "Арина", info: "В СМ"}, // [2]
+    ]
+
+
+
+    // На мою функцию fetch() не смотрите и себе не копируйте, это некоторая магия,
+    // чтобы всё в данном примере выглядело максимально так же,
+    // как и при использовании обычной функции fetch
+    function fetch() {
+        return new Promise((resolve, reject) => {
+            let response = {
+                json: function () {
+                    return new Promise((resolve, reject) => {
+                        resolve(example_data);
+                    });
+                }
+            }
+            resolve(response);
+        })
+    }
+
+
+
+    // Самое интересное находится далее, в обработчиек кнопки и запроса:
+    document.getElementById("actionBtn").addEventListener('click', (e) => {
+        fetch("/api/requests").then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+
+            // Находим на странице элемент, в который будет вставлять записи
+            const listElement = document.getElementById("reqsBlock");
+
+            // И очищаем его внутренне содержимое, чтобы ранее показаные запросы не накапливались
+            listElement.innerHTML = ""; // Обратите внимание, что хоть и элемент взят нами как
+            // переменная-константа - то есть без возможности менять значение, мы всё ещё можем
+            // менять её содержимое
+
+            // Видел использование МАР - на мой взгляд сложное, проще
+            // пройтись по нашему массиву данных data в цикле for
+            for (let index = 0; index < data.length; index++) {
+                const element = data[index]; // в каждом цикле имеем дело с одним элементом
+                // массива с нидексом=index, положенным в переменную-константу element
+                
+                const template = `
+                <div class="request-block">
+                    <h3 class="request-title">№{МестоДляНомера} - {МестоДляЗаголовка}</h3>
+                    <h4 class="request-name">Заявитель: {МестоДляИмени}</h4>
+                    <div class="request-info">{МестоДляИнформации}</div>
+                </div>
+                `; // наш шаблон является по сути переменной-константой типа "строка", но содержащей
+                // сразу несколько строк, это достигается заключением текста не в простые кавычки,
+                // а в косую ` (на кнопке 'ё' в английской раскладке)
+
+                // Берем за основу вставляемого элемента наш шаблон
+                let htmlToInsert = template;
+                // Заменяем оставленные метки. Каждая метка в фигурных скобках просто
+                // чтобы они не смешали с остальным текстом
+                htmlToInsert = htmlToInsert.replace("{МестоДляНомера}", index+1);
+                htmlToInsert = htmlToInsert.replace("{МестоДляЗаголовка}", element.title);
+                htmlToInsert = htmlToInsert.replace("{МестоДляИмени}", element.name);
+                htmlToInsert = htmlToInsert.replace("{МестоДляИнформации}", element.info);
+
+                // Внутренний html нашего списка равен строму тексту плюс новый элемент:
+                listElement.innerHTML = listElement.innerHTML + htmlToInsert;
+            }
+        });
+    })
+</script>
+
+</html>

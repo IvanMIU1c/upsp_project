@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <title>HTML5</title>
+  <!--[if IE]>
+   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style>
+   article, aside, details, figcaption, figure, footer,header,
+   hgroup, menu, nav, section { display: block; }
+
+   ul {
+       width: 60%;
+       padding: 0 0 2rem 1rem;
+   }
+  </style>
+ </head>
+ <body>
+  <h1>Web project example</h1>
+  <p>Пример простого backend на django и frontend из HTML/CSS/JS для организации веб-приложения</p>
+  <ul>
+    <li>
+        1) <a href="http://localhost/1_imitating_fetch_and_one_fill/">/1_imitating_fetch_and_one_fill/</a> <br>
+        Пример заполнения карточки из JSON полученного от backend. При этом сам fetch() - имитация, данные подставляются прямо в JavaScript. 
+        Этот приём можно использовать если backend ещё не готов ответить на наш запрос.
+    </li>
+    <li>
+        2) <a href="http://localhost/2_real_fetch_and_template_gen/">/2_real_fetch_and_template_gen/</a> <br>
+        Пример заполнения страницы несколькими карточками из JSON полученного от backend. При этом сам fetch() уже проностью работает. 
+        Так же есть отпавка статьи на сервер без form, но с input'ами.
+    </li>
+    <li>
+        Доп.1) <a href="http://localhost/page_fill.html">/page_fill.html</a> <br>
+        Дополнительный пример, собирающий из JSON карточки по шаблону. Также демонстрирует реакцию стилей на ввод пользователя.
+    </li>
+  </ul>
+ </body>
+</html>

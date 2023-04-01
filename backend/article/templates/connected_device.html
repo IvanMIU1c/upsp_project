@@ -1,0 +1,19 @@
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Connected Device&lt;/title&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.6.0.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        setInterval(function() {
+            $.get(&#x27;/connected_device/&#x27;, function(data) {
+                $('#device-name').text(data);
+            });
+        }, 1000);
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Connected Device:&lt;/h1&gt;
+    &lt;div id=&quot;device-name&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
