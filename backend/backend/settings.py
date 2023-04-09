@@ -25,7 +25,7 @@ SECRET_KEY = 'j(=nsphuhu$el_9qcmq=@_+4l$ni@7y*@@^a_)kuws)*y2qjdq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*', '0.0.0.0']
 
 
 LOGIN_REDIRECT_URL = 'loginPage/'

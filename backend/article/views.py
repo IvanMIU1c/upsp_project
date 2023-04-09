@@ -2,6 +2,7 @@ import datetime
 import time
 import uuid
 
+import operator
 from django.views.generic import TemplateView
 from django.core.cache import cache
 from rest_framework import status
@@ -64,14 +65,15 @@ class GetDeviceName(APIView):
     def get(self, request, dname):
         print(dname)
         while(1):
-            deviceName = get_object_or_404(AccessPending.objects.all(), DeviceName=dname)  ## .sort("c_at").distinct(1)
+            deviceName = AccessPending.objects.order_by('-connected_at').first()
+            ##print(deviceName.connected_at)
             serializer = ConnectedDeviceSerializer(deviceName, many=False)
-            ## return Response({'DeviceName': serializer.data})
             if(deviceName.status =='allowed'):
                 print('here')
                 return Response({'DeviceName': serializer.data})
             else:
-                print('tryu again')
+                print(deviceName)
+                print('try again')
                 time.sleep(1)
 
     def put(self, request, dname):
@@ -84,16 +86,9 @@ class GetDeviceName(APIView):
 
         return Response({"success": "status '{}' updated successfully".format(status_saved.status)})
 
-class GetUUID(APIView):
-    def get(self, request, pk):
-        savedUUID = get_object_or_404(GetDeviceName.objects.all(), pk=pk)
 
 
-class GetDeviceNameQR(APIView):
-    def get(self, request):
-        return
-
-#####################  СДЕЛАТЬ генерация куара запускала гет, косметика, проверка даты/срока куара, сортировка таблицы с девайсами
+#####################  СДЕЛАТЬ генерация куара запускала гет, косметика
 
 
 
@@ -105,6 +100,7 @@ def index2(request):
 
 
 def camera(request):
+    ##GetDeviceName.get(request)
     return render(request, 'camera.html')
 
 def anotherCamera(request):
@@ -129,6 +125,7 @@ def authCheck(request):
         img.save(qr_file)
 
     return HttpResponse(userUUID)
+
 
 def qrGEN(request):
     return render(request, "qrCode.html")
