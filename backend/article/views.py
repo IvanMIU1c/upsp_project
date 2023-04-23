@@ -6,14 +6,15 @@ import operator
 from django.views.generic import TemplateView
 from django.core.cache import cache
 from rest_framework import status
+
+import article
 from .serializers import ConnectedDeviceSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import  HttpResponse
+from django.http import HttpResponse
 from setuptools._entry_points import render
 from django.shortcuts import render
-from .camera import gen, VideoCamera
 from .models import Group, Student, AccessPending
 from .serializers import GroupSerializer, StudentSerializer
 from django.views.decorators import gzip
@@ -22,12 +23,39 @@ import threading
 from django.core.files.base import ContentFile
 from django.conf import settings
 import qrcode
+import datetime
+
+answer = 2
+answer1 = 0
+
+class GoshaAnswer(APIView):
+    def goshaOne(self, answer=answer, answer1=answer1):
+        answer1 += 1
+        return answer1
+
+    def goshaReturn(self, answer1 = answer1, answer=answer):
+        answer -= answer1
+        return answer
+
+    def answer1ReturntoZero(self):
+        article.views.answer1 = 0
+
+
+
+goshaAnswer = GoshaAnswer()
+
+
+
+
+coolResponse = goshaAnswer.goshaReturn()
+
 
 class OneAuthorView(APIView):
     def get(self, request, pk):
-        student  = get_object_or_404(Student.objects.all(), pk=pk)
+        student = get_object_or_404(Student.objects.all(), pk=pk)
         serializer = StudentSerializer(student)
         return Response({"Student": serializer.data})
+
 
 class ArticleView(APIView):
     def get(self, request):
@@ -52,9 +80,10 @@ class ArticleView(APIView):
             "success": "Article '{}' updated successfully".format(article_saved.title)
         })
 
+
 #################################
 class GetDeviceName(APIView):
-    def  post(self, request):
+    def post(self, request):
         serializer = ConnectedDeviceSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -64,21 +93,38 @@ class GetDeviceName(APIView):
 
     def get(self, request, dname):
         print(dname)
-        while(1):
+        while (1):
             deviceName = AccessPending.objects.order_by('-connected_at').first()
-            ##print(deviceName.connected_at)
             serializer = ConnectedDeviceSerializer(deviceName, many=False)
-            if(deviceName.status =='allowed'):
+            if (deviceName.status == 'allowed'):
                 print('here')
-                return Response({'DeviceName': serializer.data})
+                article.views.coolResponse = goshaAnswer.goshaOne()
+                return HttpResponse(1)
+            # return Response({'DeviceName': serializer.data})
             else:
-                print(deviceName)
-                print('try again')
+                print(deviceName.status)
                 time.sleep(1)
 
     def put(self, request, dname):
-        status_saved = get_object_or_404(AccessPending.objects.all(), DeviceName = dname)
-        serializer = ConnectedDeviceSerializer(instance=status_saved, data={'status': "allowed"}, partial = True)
+        print('good')
+        status_saved = AccessPending.objects.order_by('-connected_at').first()
+        serializer = ConnectedDeviceSerializer(instance=status_saved, data={'status': "allowed"}, partial=True)
+
+        if (serializer.is_valid()):
+            status_saved = serializer.save()
+            print(serializer.data)
+
+        return Response({"success": "status '{}' updated successfully".format(status_saved.status)})
+
+
+#####################  СДЕЛАТЬ генерация куара запускала гет, косметика
+
+
+class SecondGetDeviceName(APIView):
+    def get(self, request):
+        print('good')
+        status_saved = AccessPending.objects.order_by('-connected_at').first()
+        serializer = ConnectedDeviceSerializer(instance=status_saved, data={'status': "allowed"}, partial=True)
 
         if (serializer.is_valid()):
             status_saved = serializer.save()
@@ -88,47 +134,46 @@ class GetDeviceName(APIView):
 
 
 
-#####################  СДЕЛАТЬ генерация куара запускала гет, косметика
 
+
+class GoshaRespone(APIView):
+    def get(self, requset):
+        print("otvetil")
+        return HttpResponse(coolResponse)
 
 
 def index(request):
     return render(request, 'AfterLoginPAge.html')
+
 
 def index2(request):
     return render(request, 'index.html')
 
 
 def camera(request):
-    ##GetDeviceName.get(request)
     return render(request, 'camera.html')
+
 
 def anotherCamera(request):
     return render(request, 'qrScanTest3.html')
+
 
 def authCheck(request):
     username = None
     userID = None
     if request.user.is_authenticated:
-        #userID = request.user.user_permissions
+        # userID = request.user.user_permissions
         username = request.user.username
         userUUID = uuid.uuid4()
         currentTime = datetime.datetime.now()
 
-        qr_file = 'C:/Users/ivanm/source/repos/web-project-example-master/backend/article/templates/qrcode.png'
-        data = ""
-
-        with open(r"userUUID.txt", "r") as file:
-            for line in file:
-                data += line
-        img = qrcode.make(data)
-        img.save(qr_file)
-
     return HttpResponse(userUUID)
 
 
-def qrGEN(request):
-    return render(request, "qrCode.html")
-
-
-
+class SendTime(APIView):
+    def get(self, request):
+        article.views.answer1 = 0
+        article.views.answer = 2
+        article.views.coolResponse = goshaAnswer.goshaReturn()
+        now = datetime.datetime.now()
+        return HttpResponse(now)

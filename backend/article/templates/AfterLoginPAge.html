@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-  {% block title %}<title>Local Library</title>{% endblock %}
+  {% block title %}<title>Title</title>{% endblock %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -24,9 +24,6 @@
       <ul class="sidebar-nav">
           <li><a href="{% url 'index' %}">Домашняя страница</a></li>
           <li><a href="{% url 'camera' %}">Активировать камеру</a></li>
-          <li><a href="{% url 'anotherCamera' %}">Активировать запасную камеру</a></li>
-          <li><a href="{% url 'qrCode' %}">Сгенерировать код</a></li>
-          <li><a href="{%url 'authCheck'%}">Генерация текста для кода.</a></li>
       </ul>
      {% endblock %}
       </div>

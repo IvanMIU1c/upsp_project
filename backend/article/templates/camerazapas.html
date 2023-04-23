@@ -90,13 +90,13 @@
 
       scanner.addListener('scan', function (content) {
 
-
+		//
 $.ajax({
-      type: "GET",
-	  //url: "http://127.0.0.1:8000/add_device/add_device",
-	  url: "http://192.168.67.216:8000/add_device/add_device",
+      type: "PUT",
+      url: "http://127.0.0.1:8000/add_device/My_device",
       data: {
-        //csrfmiddlewaretoken: 'JVV6j6CcWfEA3YkDRqa8db5OFUcYAIMh',
+        csrfmiddlewaretoken: 'fy2qBTyEb0kotQdFxPPQnfsc3JUmBLF4',
+        text: 'test text'
       },
       success: function(GetDeviceName) {
         alert('QR успешно отсканирован');
