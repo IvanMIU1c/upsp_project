@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-  {% block title %}<title>SKIDKI</title>{% endblock %}
+  {% block title %}<title>Title</title>{% endblock %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -15,8 +15,8 @@
 </head>
 
 <body>
-<h1> Cистема контроля интеллектуального доступа к инструментам </h1>
-<h2> (СКИДКИ) </h2>
+<h1> Домашняя страница сайта системы контроля доступа к инструментам. </h1>
+<h2></h2>
   <div class="container-fluid">
 
     <div class="row">
@@ -25,7 +25,6 @@
       <ul class="sidebar-nav">
           <li><a href="{% url 'index' %}">Домашняя страница</a></li>
           <li><a href="{% url 'login' %}">Войти в аккаунт</a></li>
-          <li><a href="">Запасная кнопка</a></li>
       </ul>
      {% endblock %}
       </div>
