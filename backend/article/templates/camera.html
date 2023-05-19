@@ -102,6 +102,18 @@ $.ajax({
         alert('QR успешно отсканирован');
       }
     });
+
+$.ajax({
+	type: "GET",
+	url: "", //todo
+	data: {
+		//csrfmiddlewaretoken: '',
+		content
+	},
+	success: function (GetDeviceName) {
+		alert('QR успешно отсканирован');
+	}
+})
       });
 
       Instascan.Camera.getCameras().then(function (cameras) {

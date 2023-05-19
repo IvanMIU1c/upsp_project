@@ -27,6 +27,8 @@ import datetime
 
 answer = 2
 answer1 = 0
+isAuthenticated = True
+checkTiming = "pending"
 
 class GoshaAnswer(APIView):
     def goshaOne(self, answer=answer, answer1=answer1):
@@ -43,9 +45,6 @@ class GoshaAnswer(APIView):
 
 
 goshaAnswer = GoshaAnswer()
-
-
-
 
 coolResponse = goshaAnswer.goshaReturn()
 
@@ -96,6 +95,8 @@ class GetDeviceName(APIView):
         while (1):
             deviceName = AccessPending.objects.order_by('-connected_at').first()
             serializer = ConnectedDeviceSerializer(deviceName, many=False)
+                #if request.user.is_authenticated:
+                #if(isAuthenticated == True):
             if (deviceName.status == 'allowed'):
                 print('here')
                 article.views.coolResponse = goshaAnswer.goshaOne()
@@ -117,9 +118,6 @@ class GetDeviceName(APIView):
         return Response({"success": "status '{}' updated successfully".format(status_saved.status)})
 
 
-#####################  СДЕЛАТЬ генерация куара запускала гет, косметика
-
-
 class SecondGetDeviceName(APIView):
     def get(self, request):
         print('good')
@@ -131,8 +129,6 @@ class SecondGetDeviceName(APIView):
             print(serializer.data)
 
         return Response({"success": "status '{}' updated successfully".format(status_saved.status)})
-
-
 
 
 
@@ -172,8 +168,15 @@ def authCheck(request):
 
 class SendTime(APIView):
     def get(self, request):
+        article.views.checkTiming = "pending"
         article.views.answer1 = 0
         article.views.answer = 2
         article.views.coolResponse = goshaAnswer.goshaReturn()
         now = datetime.datetime.now()
         return HttpResponse(now)
+
+
+class CheckingTiming(APIView):
+    def get(self, request):
+        article.views.checkTiming = request
+
